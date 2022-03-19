@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="4dp"
+    style="?attr/materialCardViewFilledStyle"
+    app:cardCornerRadius="16dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/img_item_photo"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_outline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_item_name"
+            style="@style/TextContent.Heading.Item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/img_item_photo"
+            app:layout_constraintBottom_toBottomOf="@+id/img_item_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_item_photo"
+            app:layout_constraintTop_toTopOf="@+id/img_item_photo"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="@string/name_placeholder" />
+
+        <TextView
+            android:id="@+id/tv_item_username"
+            style="@style/TextContent.Subheading.Item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/img_item_photo"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_name"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="@string/username_placeholder" />
+
+
+        <ImageView
+            android:id="@+id/img_item_repository_icon"
+            style="@style/ImageIcon"
+            android:alpha="100"
+            app:layout_constraintBottom_toBottomOf="@+id/img_item_photo"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_username"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_username"
+            app:srcCompat="@drawable/ic_repository_24"
+            app:tint="?attr/colorOnBackground" />
+
+        <TextView
+            android:id="@+id/tv_item_repository"
+            style="@style/TextContent.Body.Item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/item_repository_placeholder"
+            app:layout_constraintBottom_toBottomOf="@+id/img_item_repository_icon"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/img_item_repository_icon"
+            app:layout_constraintTop_toTopOf="@+id/img_item_repository_icon" />
+
+
+        <ImageView
+            android:id="@+id/img_item_follower_icon"
+            style="@style/ImageIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_item_repository_icon"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/img_item_repository_icon"
+            app:srcCompat="@drawable/ic_follower_24"
+            app:tint="?attr/colorOnBackground"/>
+
+        <TextView
+            style="@style/TextContent.Body.Item"
+            android:id="@+id/tv_item_follower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/item_followers_placeholder"
+            app:layout_constraintBottom_toBottomOf="@+id/img_item_follower_icon"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_username"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/img_item_follower_icon"
+            app:layout_constraintTop_toTopOf="@+id/img_item_follower_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
