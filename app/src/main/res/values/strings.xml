@@ -128,4 +128,6 @@
     <string name="tab_follower">Followers</string>
     <string name="tab_following">Following</string>
     <string name="user_profile_photo">User profile photo</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Enter username</string>
 </resources>

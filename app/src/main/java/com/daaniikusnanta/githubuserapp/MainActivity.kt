@@ -1,11 +1,16 @@
 package com.daaniikusnanta.githubuserapp
 
 //import android.content.Intent
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +20,7 @@ import java.lang.StringBuilder
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val listUsers = ArrayList<UsersResponseItem>()
+    private lateinit var listUserAdapter: ListUserAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +55,8 @@ class MainActivity : AppCompatActivity() {
 
         listUsers.addAll(users)
 
-        val listUserAdapter = ListUserAdapter(listUsers)
+        listUserAdapter = ListUserAdapter(listUsers)
         binding.rvUsers.adapter = listUserAdapter
-
-        binding.tvListCount.text = StringBuilder().append("Showing ").append(listUsers.size).append(" users")
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(data: UsersResponseItem) {
@@ -66,6 +70,45 @@ class MainActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_top_app_bar, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filter(newText)
+                return false
+            }
+        })
+        return true
+    }
+
+    private fun filter(text : String) {
+        val filteredList = ArrayList<UsersResponseItem>()
+
+        for (user in listUsers) {
+            if (user.login.contains(text)) {
+                filteredList.add(user)
+            }
+        }
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "No User Found..", Toast.LENGTH_SHORT).show()
+        } else {
+            listUserAdapter.filterList(filteredList)
         }
     }
 }

@@ -12,6 +12,7 @@ import java.lang.StringBuilder
 class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
+    private var listUserData = listUser
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
@@ -23,17 +24,17 @@ class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : Recy
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val user = listUser[position]
+        val user = listUserData[position]
         Glide.with(holder.itemView)
             .load(user.avatarUrl)
             .into(holder.imgPhoto)
         holder.imgPhoto.clipToOutline = true
         holder.tvUsername.text = user.login
 
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUserData[holder.adapterPosition]) }
     }
 
-    override fun getItemCount(): Int = listUser.size
+    override fun getItemCount(): Int = listUserData.size
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
@@ -42,5 +43,10 @@ class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : Recy
 
     interface OnItemClickCallback {
         fun onItemClicked(data: UsersResponseItem)
+    }
+
+    public fun filterList(filteredList : ArrayList<UsersResponseItem>) {
+        listUserData = filteredList
+        notifyDataSetChanged()
     }
 }
