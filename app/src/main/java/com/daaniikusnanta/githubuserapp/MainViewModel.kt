@@ -1,6 +1,5 @@
 package com.daaniikusnanta.githubuserapp
 
-import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,10 +33,7 @@ class MainViewModel : ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        _listUsers.value = responseBody
-                    }
+                    _listUsers.value = response.body()
                 } else {
                     Log.e(TAG, "onResponse onFailure: ${response.message()}")
                 }

@@ -7,9 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import java.lang.StringBuilder
 
-class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+class ListUserAdapter(listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private var listUserData = listUser
@@ -45,7 +44,7 @@ class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : Recy
         fun onItemClicked(data: UsersResponseItem)
     }
 
-    public fun filterList(filteredList : ArrayList<UsersResponseItem>) {
+    fun filterList(filteredList : ArrayList<UsersResponseItem>) {
         listUserData = filteredList
         notifyDataSetChanged()
     }
