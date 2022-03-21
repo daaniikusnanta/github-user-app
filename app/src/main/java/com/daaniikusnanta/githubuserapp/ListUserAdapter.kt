@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import java.lang.StringBuilder
 
-class ListUserAdapter(private val listUser: ArrayList<UserResponse>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -28,10 +28,7 @@ class ListUserAdapter(private val listUser: ArrayList<UserResponse>) : RecyclerV
             .load(user.avatarUrl)
             .into(holder.imgPhoto)
         holder.imgPhoto.clipToOutline = true
-        holder.tvName.text = user.name
         holder.tvUsername.text = user.login
-        holder.tvRepository.text = StringBuilder().append(user.publicRepos).append(" Repos")
-        holder.tvFollower.text = StringBuilder().append(user.followers).append(" Followers")
 
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
     }
@@ -40,13 +37,10 @@ class ListUserAdapter(private val listUser: ArrayList<UserResponse>) : RecyclerV
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
-        var tvName: TextView = itemView.findViewById(R.id.tv_item_name)
         var tvUsername: TextView = itemView.findViewById(R.id.tv_item_username)
-        var tvRepository: TextView = itemView.findViewById(R.id.tv_item_repository)
-        var tvFollower: TextView = itemView.findViewById(R.id.tv_item_follower)
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: UserResponse)
+        fun onItemClicked(data: UsersResponseItem)
     }
 }

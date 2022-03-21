@@ -7,10 +7,10 @@ import retrofit2.http.Path
 interface ApiService {
     @GET("users")
     fun getUsers(
-    ): Call<UsersResponse>
+    ): Call<List<UsersResponseItem>>
 
     @GET("users/{login}")
     fun getUser(
         @Path("login") id: String
-    ): Call<UserResponse>
+    ): Call<UserDetailResponse>
 }
