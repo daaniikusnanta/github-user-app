@@ -8,9 +8,12 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +21,8 @@ import com.daaniikusnanta.githubuserapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val listUsers = ArrayList<UsersResponseItem>()
     private lateinit var listUserAdapter: ListUserAdapter
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +37,11 @@ class MainActivity : AppCompatActivity() {
             binding.rvUsers.layoutManager = LinearLayoutManager(this)
         }
 
-        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
-        mainViewModel.listUsers.observe(this, { listUsers ->
+        mainViewModel.listUsers.observe(this@MainActivity, { listUsers ->
             setUsersData(listUsers)
         })
 
-        mainViewModel.isLoading.observe(this, {
+        mainViewModel.isLoading.observe(this@MainActivity, {
             showLoading(it)
         })
     }
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUsersData(users: List<UsersResponseItem>) {
-
+        val listUsers = ArrayList<UsersResponseItem>()
         listUsers.addAll(users)
 
         listUserAdapter = ListUserAdapter(listUsers)
@@ -78,36 +80,33 @@ class MainActivity : AppCompatActivity() {
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu.findItem(R.id.search).actionView as SearchView
+        val searchItem = menu.findItem(R.id.search)
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.queryHint = resources.getString(R.string.search_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
+                mainViewModel.searchUsers(query)
+                searchView.clearFocus()
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                filter(newText)
                 return false
             }
         })
-        return true
-    }
 
-    private fun filter(text : String) {
-        val filteredList = ArrayList<UsersResponseItem>()
-
-        for (user in listUsers) {
-            if (user.login.contains(text)) {
-                filteredList.add(user)
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                return true
             }
-        }
 
-        if (filteredList.isEmpty()) {
-            Toast.makeText(this, "No User Found..", Toast.LENGTH_SHORT).show()
-        } else {
-            listUserAdapter.filterList(filteredList)
-        }
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                mainViewModel.searchUsers(MainViewModel.emptyQuery)
+                return true
+            }
+        })
+        return true
     }
 }

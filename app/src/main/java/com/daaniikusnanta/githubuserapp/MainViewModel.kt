@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,32 +16,41 @@ class MainViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private var lastQuery: String = emptyQuery
+
     companion object{
         private const val TAG = "MainViewModel"
+        const val emptyQuery = "\"\""
     }
 
     init {
-        getUsers()
+        searchUsers()
     }
 
-    private fun getUsers() {
+    private fun searchUsers() {
+        searchUsers(lastQuery)
+    }
+
+    fun searchUsers(query: String) {
+        lastQuery = query
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getUsers()
-        client.enqueue(object : Callback<List<UsersResponseItem>> {
+
+        val client = ApiConfig.getApiService().getSearchedUsers(query)
+        client.enqueue(object : Callback<SearchedUsersResponse> {
             override fun onResponse(
-                call: Call<List<UsersResponseItem>>,
-                response: Response<List<UsersResponseItem>>
+                call: Call<SearchedUsersResponse>,
+                response: Response<SearchedUsersResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    _listUsers.value = response.body()
+                    _listUsers.value = response.body()?.items
                 } else {
                     Log.e(TAG, "onResponse onFailure: ${response.message()}")
                 }
             }
-            override fun onFailure(call: Call<List<UsersResponseItem>>, t: Throwable) {
+            override fun onFailure(call: Call<SearchedUsersResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "getUsers() onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }

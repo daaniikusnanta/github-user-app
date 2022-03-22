@@ -8,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class ListUserAdapter(listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private var listUserData = listUser
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
@@ -23,17 +22,17 @@ class ListUserAdapter(listUser: ArrayList<UsersResponseItem>) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val user = listUserData[position]
+        val user = listUser[position]
         Glide.with(holder.itemView)
             .load(user.avatarUrl)
             .into(holder.imgPhoto)
         holder.imgPhoto.clipToOutline = true
         holder.tvUsername.text = user.login
 
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUserData[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
     }
 
-    override fun getItemCount(): Int = listUserData.size
+    override fun getItemCount(): Int = listUser.size
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPhoto: ImageView = itemView.findViewById(R.id.img_item_photo)
@@ -42,10 +41,5 @@ class ListUserAdapter(listUser: ArrayList<UsersResponseItem>) : RecyclerView.Ada
 
     interface OnItemClickCallback {
         fun onItemClicked(data: UsersResponseItem)
-    }
-
-    fun filterList(filteredList : ArrayList<UsersResponseItem>) {
-        listUserData = filteredList
-        notifyDataSetChanged()
     }
 }
