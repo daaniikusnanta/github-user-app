@@ -7,8 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.daaniikusnanta.githubuserapp.database.UserItem
 
-class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+class ListUserAdapter(private val listUser: ArrayList<UserItem>) : RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -27,7 +28,7 @@ class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : Recy
             .load(user.avatarUrl)
             .into(holder.imgPhoto)
         holder.imgPhoto.clipToOutline = true
-        holder.tvUsername.text = user.login
+        holder.tvUsername.text = user.username
 
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
     }
@@ -40,6 +41,6 @@ class ListUserAdapter(private val listUser: ArrayList<UsersResponseItem>) : Recy
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: UsersResponseItem)
+        fun onItemClicked(data: UserItem)
     }
 }

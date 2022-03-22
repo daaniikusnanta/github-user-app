@@ -9,4 +9,11 @@
         android:icon="@drawable/ic_baseline_share_24"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_baseline_favorite_border_24"
+        android:title="@string/favorite_action"
+        android:visible="true"
+        app:showAsAction="ifRoom|collapseActionView" />
+
 </menu>

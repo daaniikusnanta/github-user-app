@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.daaniikusnanta.githubuserapp.database.UserItem
 import com.daaniikusnanta.githubuserapp.databinding.FragmentFollowBinding
 
 class FollowFragment : Fragment() {
@@ -51,8 +52,7 @@ class FollowFragment : Fragment() {
     }
 
     private fun setUsersData(listUsers: List<UsersResponseItem>) {
-        val users = ArrayList<UsersResponseItem>()
-        users.addAll(listUsers)
+        val users = createUserItemsFromUsersResponse(listUsers)
 
         if(users.count() == 0) {
             binding.tvNoData.visibility = View.VISIBLE
@@ -62,16 +62,16 @@ class FollowFragment : Fragment() {
             binding.rvUsers.adapter = listUserAdapter
 
             listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: UsersResponseItem) {
-                    showUserDetail(data.login)
+                override fun onItemClicked(data: UserItem) {
+                    showUserDetail(data)
                 }
             })
         }
     }
 
-    private fun showUserDetail(username: String) {
+    private fun showUserDetail(user: UserItem) {
         val moveIntent = Intent(requireActivity(), DetailUserActivity::class.java)
-        moveIntent.putExtra(DetailUserActivity.EXTRA_USERNAME, username)
+        moveIntent.putExtra(DetailUserActivity.EXTRA_USER, user)
         startActivity(moveIntent)
     }
 

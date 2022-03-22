@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.daaniikusnanta.githubuserapp.database.UserItem
 import com.daaniikusnanta.githubuserapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -46,22 +47,21 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun showUserDetail(username: String) {
+    private fun showUserDetail(user: UserItem) {
         val moveIntent = Intent(this@MainActivity, DetailUserActivity::class.java)
-        moveIntent.putExtra(DetailUserActivity.EXTRA_USERNAME, username)
+        moveIntent.putExtra(DetailUserActivity.EXTRA_USER, user)
         startActivity(moveIntent)
     }
 
     private fun setUsersData(users: List<UsersResponseItem>) {
-        val listUsers = ArrayList<UsersResponseItem>()
-        listUsers.addAll(users)
+        val listUsers = createUserItemsFromUsersResponse(users)
 
         listUserAdapter = ListUserAdapter(listUsers)
         binding.rvUsers.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: UsersResponseItem) {
-                showUserDetail(data.login)
+            override fun onItemClicked(data: UserItem) {
+                showUserDetail(data)
             }
         })
     }
@@ -108,5 +108,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.show_favorite -> {
+                val moveIntent = Intent(this@MainActivity, FavoriteUsersActivity::class.java)
+                startActivity(moveIntent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
