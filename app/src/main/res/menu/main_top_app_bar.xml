@@ -13,7 +13,12 @@
         android:id="@+id/show_favorite"
         android:icon="@drawable/ic_baseline_favorite_24"
         android:title="@string/show_favorite_users"
-        android:visible="true"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/dark_mode_switch"
+        android:icon="@drawable/ic_baseline_dark_mode_24"
+        android:title="@string/dark_mode_menu_title"
+        app:showAsAction="ifRoom" />
 
 </menu>

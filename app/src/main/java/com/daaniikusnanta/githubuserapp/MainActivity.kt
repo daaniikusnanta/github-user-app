@@ -1,6 +1,5 @@
 package com.daaniikusnanta.githubuserapp
 
-//import android.content.Intent
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -10,20 +9,29 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daaniikusnanta.githubuserapp.database.UserItem
 import com.daaniikusnanta.githubuserapp.databinding.ActivityMainBinding
 
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var listUserAdapter: ListUserAdapter
-    private val mainViewModel by viewModels<MainViewModel>()
+    private var isDarkModeActive: Boolean = false
+    private val mainViewModel by viewModels<MainViewModel> {
+        MainViewModel.Factory(
+            SettingPreferences.getInstance(dataStore)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +52,16 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.isLoading.observe(this@MainActivity, {
             showLoading(it)
+        })
+
+        mainViewModel.getThemeSettings().observe(this, {isDarkModeActive: Boolean ->
+            this.isDarkModeActive = isDarkModeActive
+            if(isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            invalidateOptionsMenu()
         })
     }
 
@@ -107,6 +125,10 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+
+        val darkModeSwitch = menu.findItem(R.id.dark_mode_switch)
+        if(isDarkModeActive) darkModeSwitch.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_light_mode_24)
+        else darkModeSwitch.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_dark_mode_24)
         return true
     }
 
@@ -115,6 +137,10 @@ class MainActivity : AppCompatActivity() {
             R.id.show_favorite -> {
                 val moveIntent = Intent(this@MainActivity, FavoriteUsersActivity::class.java)
                 startActivity(moveIntent)
+                return true
+            }
+            R.id.dark_mode_switch -> {
+                mainViewModel.saveThemeSetting(!isDarkModeActive)
                 return true
             }
         }

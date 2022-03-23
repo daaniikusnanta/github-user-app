@@ -29,17 +29,10 @@
     <string name="location_icon_desc">Location icon</string>
     <string name="img_detail_photo_desc">User\'s avatar</string>
     <string name="title_activity_favorite_user">FavoriteUserActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="favorite_action">Make favorite</string>
     <string name="unfavorite_action">Remove from favorite</string>
-    <string name="show_favorite_users">Show favorite users</string>
-    <string name="loading_placeholder">Loading...</string>
+    <string name="show_favorite_users">Favorite Users</string>
+    <string name="loading_placeholder">Loading…</string>
     <string name="favorite_users_actionbar_title">Favorite Users</string>
+    <string name="dark_mode_menu_title">Dark Mode</string>
 </resources>
